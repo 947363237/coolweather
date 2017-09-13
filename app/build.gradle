@@ -24,13 +24,17 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    testCompile 'junit:junit:4.12'
 
     //额外添加包
-    compile 'org.litepal.android:core:1.4.1'        //LitePal 用于对数据库进行操作
-    compile 'com.squareup.okhttp3:okhttp:3.4.1'     //OkHttp 用于进行网络请求
-    compile 'com.google.code.gson:gson:2.7'         //GSON 用于解析 JSON 数据
-    compile 'com.github.bumptech.glide:glide:3.7.0' //Glide 用于加载和展示图片
+    //LitePal 用于对数据库进行操作
+    //OkHttp 用于进行网络请求
+    //GSON 用于解析 JSON 数据
+    //Glide 用于加载和展示图片
+    compile 'com.android.support:appcompat-v7:26.+'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'org.litepal.android:core:1.4.1'
+    compile 'com.squareup.okhttp3:okhttp:3.4.1'
+    compile 'com.google.code.gson:gson:2.7'
+    compile 'com.github.bumptech.glide:glide:3.7.0'
+    testCompile 'junit:junit:4.12'
 }
