@@ -1,7 +1,6 @@
 package coolweather.lis.com.coolweather.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import coolweather.lis.com.coolweather.R;
-import coolweather.lis.com.coolweather.activity.WeatherActivity;
 import coolweather.lis.com.coolweather.db.City;
 import coolweather.lis.com.coolweather.db.County;
 import coolweather.lis.com.coolweather.db.Province;
@@ -69,6 +67,20 @@ public class ChooseAreaFragment extends Fragment {
      * 当前选中的级别
      */
     private int currentLevel;
+
+    /**
+     * 选择完毕回调
+     */
+    private OnSelected onSelected;
+    public interface OnSelected{
+        void onSelected(String weatherId);
+    }
+    public void setOnSelected(OnSelected onSelected){
+        if(onSelected == null)
+            throw new RuntimeException("这个方法需要被复写，这是选择完毕后需要做的事情");
+        this.onSelected = onSelected;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -83,6 +95,10 @@ public class ChooseAreaFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        /**
+         * 选项事件
+         */
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -95,13 +111,17 @@ public class ChooseAreaFragment extends Fragment {
                     queryCounties();
                 } else if (currentLevel == LEVEL_COUNTY) {
                     String weatherId = countyList.get(position).getWeatherId();
-                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
-                    intent.putExtra("weather_id", weatherId);
-                    startActivity(intent);
-                    getActivity().finish();
+                    if (onSelected != null) {
+                        //选择完成后的回调，主动权交给其引用的activity处理
+                        onSelected.onSelected(weatherId);
+                    }
                 }
             }
         });
+
+        /**
+         * 返回事件
+         */
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
