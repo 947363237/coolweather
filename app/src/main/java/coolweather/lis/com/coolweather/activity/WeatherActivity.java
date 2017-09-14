@@ -1,5 +1,6 @@
 package coolweather.lis.com.coolweather.activity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -26,6 +27,7 @@ import coolweather.lis.com.coolweather.R;
 import coolweather.lis.com.coolweather.fragment.ChooseAreaFragment;
 import coolweather.lis.com.coolweather.gson.Forecast;
 import coolweather.lis.com.coolweather.gson.Weather;
+import coolweather.lis.com.coolweather.service.AutoUpdateWeatherService;
 import coolweather.lis.com.coolweather.util.HttpUtil;
 import coolweather.lis.com.coolweather.util.Utility;
 import okhttp3.Call;
@@ -54,6 +56,7 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (Build.VERSION.SDK_INT >= 21) {
             View decorView = getWindow().getDecorView();
             decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -131,6 +134,7 @@ public class WeatherActivity extends AppCompatActivity {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
+
         //设置切换城市回调时间
         ChooseAreaFragment chooseAreaFragment = (ChooseAreaFragment)
                 getSupportFragmentManager().findFragmentById(R.id.choose_area_fragment);
@@ -192,6 +196,9 @@ public class WeatherActivity extends AppCompatActivity {
      * 处理并展示 Weather 实体类中的数据
      */
     private void showWeatherInfo(Weather weather) {
+        /**
+         * 显示天气界面
+         */
         String cityName = weather.getBasic().getCityName();
         String updateTime = weather.getBasic().getUpdate().getUpdateTime().split(" ")[1];
         String degree = weather.getNow().getTemperature() + "℃";
@@ -224,6 +231,12 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+
+        /**
+         * 开启定时刷新天气服务
+         */
+        Intent intent = new Intent(this, AutoUpdateWeatherService.class);
+        startService(intent);
     }
 
     /**
