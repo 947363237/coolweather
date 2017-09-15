@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +53,7 @@ public class WeatherActivity extends AppCompatActivity {
     private String weatherId;
     private Button navButton;
     public DrawerLayout drawerLayout;
+    public RelativeLayout areaTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +84,7 @@ public class WeatherActivity extends AppCompatActivity {
         sportText = (TextView) findViewById(R.id.sport_text);
         bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
+        areaTitle = (RelativeLayout) findViewById(R.id.area_title);
 
         /**
          * 初始化视图
@@ -146,6 +149,20 @@ public class WeatherActivity extends AppCompatActivity {
                 requestWeather(weatherId);
             }
         });
+
+        /**
+         * 获取状态栏高度,并设置选择区域的标题高度
+         */
+        int statusBarHeight1 = -1;
+        //获取status_bar_height资源的ID
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            //根据资源ID获取响应的尺寸值
+            statusBarHeight1 = getResources().getDimensionPixelSize(resourceId);
+        }
+        //设置标题高度，不然太靠上，会被状态栏遮住
+        LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) areaTitle.getLayoutParams();
+        layoutParams.height += statusBarHeight1;
     }
     /**
      * 根据天气 id 请求城市天气信息
