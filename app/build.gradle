@@ -11,10 +11,22 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    /*签名配置*/
+    signingConfigs {
+        config {
+            storeFile file('C:/Users/Administrator/coolweather.jks')
+            storePassword 'w947363237'
+            keyAlias 'coolweather'
+            keyPassword 'w947363237'
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
     }
 }
